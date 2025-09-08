@@ -60,64 +60,173 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: [
-            DropdownButton<String>(
-              value: selectedRole,
-              items: const [
-                DropdownMenuItem(value: 'doctor', child: Text('Doctor')),
-                DropdownMenuItem(value: 'clinic', child: Text('Clinic')),
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    selectedRole = value;
-                  });
-                }
-              },
+      appBar: AppBar(
+        title: const Text('Sign Up'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+          ),
+        ),
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    DropdownButtonFormField<String>(
+                      value: selectedRole,
+                      items: const [
+                        DropdownMenuItem(
+                            value: 'doctor', child: Text('Doctor')),
+                        DropdownMenuItem(
+                            value: 'clinic', child: Text('Clinic')),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedRole = value;
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Role",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: const Icon(Icons.email),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 16),
+                    if (selectedRole == 'clinic') ...[
+                      TextField(
+                        controller: clinicNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Clinic Name',
+                          prefixIcon: const Icon(Icons.local_hospital),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: locationController,
+                        decoration: InputDecoration(
+                          labelText: 'Location',
+                          prefixIcon: const Icon(Icons.location_on),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ] else ...[
+                      TextField(
+                        controller: doctorNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Doctor Name',
+                          prefixIcon: const Icon(Icons.person),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: departmentController,
+                        decoration: InputDecoration(
+                          labelText: 'Department',
+                          prefixIcon: const Icon(Icons.business),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: experienceController,
+                        decoration: InputDecoration(
+                          labelText: 'Experience',
+                          prefixIcon: const Icon(Icons.timeline),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                    GestureDetector(
+                      onTap: signUp,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            if (selectedRole == 'clinic') ...[
-              TextField(
-                controller: clinicNameController,
-                decoration: const InputDecoration(labelText: 'Clinic Name'),
-              ),
-              TextField(
-                controller: locationController,
-                decoration: const InputDecoration(labelText: 'Location'),
-              ),
-            ] else ...[
-              TextField(
-                controller: doctorNameController,
-                decoration: const InputDecoration(labelText: 'Doctor Name'),
-              ),
-              TextField(
-                controller: departmentController,
-                decoration: const InputDecoration(labelText: 'Department'),
-              ),
-              TextField(
-                controller: experienceController,
-                decoration: const InputDecoration(labelText: 'Experience'),
-                keyboardType: TextInputType.number,
-              ),
-            ],
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: signUp,
-              child: const Text('Sign Up'),
-            ),
-          ],
+          ),
         ),
       ),
     );
