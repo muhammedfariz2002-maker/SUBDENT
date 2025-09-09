@@ -16,7 +16,7 @@ class ClinicHomePage extends StatefulWidget {
 
 class _ClinicHomePageState extends State<ClinicHomePage> {
   int _selectedIndex = 0;
-  
+
   static const List<Widget> _pages = [
     ClinicTab1(),
     ClinicTab2(),
@@ -35,7 +35,19 @@ class _ClinicHomePageState extends State<ClinicHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Clinic Home Page'),
+        title: const Text(
+          'Clinic',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -45,36 +57,58 @@ class _ClinicHomePageState extends State<ClinicHomePage> {
           ),
         ],
       ),
-      body: _pages[_selectedIndex], // Display the selected page
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.schedule),
-            label: 'Postings',
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFe0f7fa), Color(0xFFf1f9ff)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Doctors',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.medical_services_rounded),
-            label: 'Accepted',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
+        ),
+        child: _pages[_selectedIndex], // Display the selected page
+      ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          selectedItemColor: const Color(0xFF2193b0),
+          unselectedItemColor: Colors.grey,
+          onTap: _onItemTapped,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.schedule),
+              label: 'Postings',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              label: 'Doctors',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.history),
+              label: 'History',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.medical_services_rounded),
+              label: 'Accepted',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat),
+              label: 'Chat',
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF2193b0),
         onPressed: () {
           Navigator.push(
             context,
@@ -83,7 +117,7 @@ class _ClinicHomePageState extends State<ClinicHomePage> {
             ),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
