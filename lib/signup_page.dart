@@ -32,29 +32,65 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Future<void> signUp() async {
-    final userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-    );
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
 
-    final uid = userCredential.user!.uid;
-    Map<String, dynamic> data = {
-      'email': emailController.text.trim(),
-      'role': selectedRole,
-      'approved': false,
-      'createdAt': FieldValue.serverTimestamp(),
-    };
-    if (selectedRole == 'clinic') {
-      data['clinicName'] = clinicNameController.text.trim();
-      data['location'] = locationController.text.trim();
-    } else {
-      data['doctorName'] = doctorNameController.text.trim();
-      data['department'] = departmentController.text.trim();
-      data['experience'] = experienceController.text.trim();
+      final uid = userCredential.user!.uid;
+      Map<String, dynamic> data = {
+        'email': emailController.text.trim(),
+        'role': selectedRole,
+        'approved': false,
+        'createdAt': FieldValue.serverTimestamp(),
+      };
+
+      if (selectedRole == 'clinic') {
+        data['clinicName'] = clinicNameController.text.trim();
+        data['location'] = locationController.text.trim();
+      } else {
+        data['doctorName'] = doctorNameController.text.trim();
+        data['department'] = departmentController.text.trim();
+        data['experience'] = experienceController.text.trim();
+      }
+
+      await FirebaseFirestore.instance.collection('users').doc(uid).set(data);
+
+      // ✅ Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Successfully signed up!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = "An error occurred";
+      if (e.code == 'email-already-in-use') {
+        errorMessage = "User already exists!";
+      } else if (e.code == 'weak-password') {
+        errorMessage = "Password is too weak!";
+      } else if (e.code == 'invalid-email') {
+        errorMessage = "Invalid email address!";
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
-    await FirebaseFirestore.instance.collection('users').doc(uid).set(data);
-    await FirebaseAuth.instance.signOut();
   }
 
   @override
