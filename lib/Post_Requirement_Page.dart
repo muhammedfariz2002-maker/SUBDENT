@@ -22,6 +22,7 @@ class _Post_Requirement_PageState extends State<Post_Requirement_Page> {
         experienceController.text.isEmpty) {
       return;
     }
+
     final userDoc =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final clinicName = userDoc.data()?['clinicName'] ?? 'Unknown Clinic';
@@ -34,6 +35,14 @@ class _Post_Requirement_PageState extends State<Post_Requirement_Page> {
       'experienceRequired': experienceController.text,
       'status': 'open',
     });
+
+    // ✅ Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Requirement posted successfully!"),
+        backgroundColor: Colors.green,
+      ),
+    );
 
     Navigator.pop(context);
   }
